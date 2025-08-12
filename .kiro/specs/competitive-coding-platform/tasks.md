@@ -26,14 +26,14 @@
         - Add loading states while checking authentication
         - _Requirements: 1.2, 1.6_
 
-- [ ]   3. Build core layout and navigation
-    - [ ] 3.1 Create root layout component
+- [x]   3. Build core layout and navigation
+    - [x] 3.1 Create root layout component
         - Build RootLayout using Shadcn/UI components with header, navigation, and main content areas
         - Implement responsive navigation with Shadcn/UI Sheet component for mobile hamburger menu
         - Add user profile dropdown using Shadcn/UI DropdownMenu component when authenticated
         - Use Shadcn/UI Avatar component for user profile pictures
         - _Requirements: 6.1, 6.2, 7.5_
-    - [ ] 3.2 Implement theme system
+    - [x] 3.2 Implement theme system
         - Create ThemeProvider context with light/dark mode support using Shadcn/UI's built-in theme system
         - Build ThemeToggle component using Shadcn/UI Button with Moon/Sun icons from lucide-react
         - Implement theme persistence in localStorage with next-themes integration
