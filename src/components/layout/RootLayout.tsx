@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import { Menu, X, Code, User, LogOut, Settings } from 'lucide-react'
+import { Menu, Code, User, LogOut, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import {
@@ -98,13 +98,13 @@ export function RootLayout({ children }: RootLayoutProps) {
                                     </div>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem asChild>
-                                        <Link to="/profile" className="flex items-center">
+                                        <Link to={"/profile" as any} className="flex items-center">
                                             <User className="mr-2 h-4 w-4" />
                                             Profile
                                         </Link>
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
-                                        <Link to="/settings" className="flex items-center">
+                                        <Link to={"/settings" as any} className="flex items-center">
                                             <Settings className="mr-2 h-4 w-4" />
                                             Settings
                                         </Link>
@@ -119,10 +119,10 @@ export function RootLayout({ children }: RootLayoutProps) {
                         ) : (
                             <div className="flex items-center space-x-2">
                                 <Button variant="ghost" asChild>
-                                    <Link to="/login">Sign In</Link>
+                                    <Link to={"/login" as any}>Sign In</Link>
                                 </Button>
                                 <Button asChild>
-                                    <Link to="/register">Sign Up</Link>
+                                    <Link to={"/register" as any}>Sign Up</Link>
                                 </Button>
                             </div>
                         )}
@@ -197,7 +197,7 @@ export function RootLayout({ children }: RootLayoutProps) {
                                                     asChild
                                                 >
                                                     <Link
-                                                        to="/profile"
+                                                        to={"/profile" as any}
                                                         onClick={() => setIsMobileMenuOpen(false)}
                                                     >
                                                         <User className="mr-2 h-4 w-4" />
@@ -210,7 +210,7 @@ export function RootLayout({ children }: RootLayoutProps) {
                                                     asChild
                                                 >
                                                     <Link
-                                                        to="/settings"
+                                                        to={"/settings" as any}
                                                         onClick={() => setIsMobileMenuOpen(false)}
                                                     >
                                                         <Settings className="mr-2 h-4 w-4" />
@@ -235,7 +235,7 @@ export function RootLayout({ children }: RootLayoutProps) {
                                                 className="justify-start"
                                             >
                                                 <Link
-                                                    to="/login"
+                                                    to={"/login" as any}
                                                     onClick={() => setIsMobileMenuOpen(false)}
                                                 >
                                                     Sign In

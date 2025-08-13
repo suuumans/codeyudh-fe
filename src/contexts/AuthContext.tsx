@@ -2,6 +2,7 @@ import { createContext, useContext, useReducer, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { User, LoginCredentials, RegisterData } from '../types';
 import { tokenStorage } from '../lib/auth-storage';
+import { userActions } from '../stores/userStore';
 
 // Auth state interface
 export interface AuthState {
@@ -177,8 +178,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
                         token,
                     },
                 });
+                // Update user store
+                userActions.setUser(userData);
             } else {
                 dispatch({ type: 'AUTH_LOGOUT' });
+                // Clear user store
+                userActions.logout();
             }
         };
 
@@ -245,6 +250,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const logout = (): void => {
         tokenStorage.clearAll();
         dispatch({ type: 'AUTH_LOGOUT' });
+        // Clear user store
+        userActions.logout();
     };
 
     // Clear error function
@@ -256,6 +263,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const updateUser = (user: User): void => {
         tokenStorage.setUserData(user);
         dispatch({ type: 'AUTH_UPDATE_USER', payload: user });
+        // Update user store
+        userActions.setUser(user);
     };
 
     const contextValue: AuthContextType = {

@@ -65,8 +65,8 @@ export function ProtectedRoute({
 
             // Redirect to login with return URL
             navigate({
-                to: redirectTo,
-                search: { returnTo },
+                to: redirectTo as any,
+                search: { returnTo } as any,
                 replace: true,
             })
         }
@@ -110,8 +110,8 @@ export function useProtectedRoute(redirectTo?: string) {
         if (!isLoading && !isAuthenticated) {
             const returnTo = location.pathname
             navigate({
-                to: redirectTo || '/login',
-                search: { returnTo },
+                to: (redirectTo || '/login') as any,
+                search: { returnTo } as any,
                 replace: true,
             })
         }

@@ -40,7 +40,11 @@ export interface CodeExecutionRequest {
     code: string
     language: ProgrammingLanguage
     problemId: string
-    testCases?: TestCase[]
+    testCases?: Array<{
+        input: string
+        expectedOutput: string
+        isHidden: boolean
+    }>
 }
 
 export interface CodeExecutionResponse {
