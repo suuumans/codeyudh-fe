@@ -1,4 +1,4 @@
-import { useState } from 'react'
+// Removed useState - using TanStack Store instead
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -17,6 +17,7 @@ import { formatDistanceToNow } from 'date-fns'
 import { Search, ExternalLink, Code } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { useFilteredSubmissions, useSubmissionFilters } from '@/hooks/useSubmissionStore'
+import { usePagination } from '@/hooks/useUIStore'
 
 interface SubmissionHistoryProps {
   submissions: Submission[]
@@ -62,12 +63,12 @@ function getStatusLabel(status: SubmissionStatus) {
 }
 
 export function SubmissionHistory({ submissions, loading }: SubmissionHistoryProps) {
-  const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
   
-  // Use store-based filtering
+  // Use store-based filtering and pagination
   const filteredSubmissions = useFilteredSubmissions()
   const { setFilters } = useSubmissionFilters()
+  const { currentPage, setCurrentPage } = usePagination('submissions')
 
   // Paginate submissions
   const totalPages = Math.ceil(filteredSubmissions.length / itemsPerPage)
@@ -228,7 +229,7 @@ export function SubmissionHistory({ submissions, loading }: SubmissionHistoryPro
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
                   >
                     Previous
@@ -236,7 +237,7 @@ export function SubmissionHistory({ submissions, loading }: SubmissionHistoryPro
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
                   >
                     Next

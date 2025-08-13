@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/collapsible'
 // Select components removed as they're not used in current implementation
 import { ChevronDown, Filter, X } from 'lucide-react'
-import { useState } from 'react'
+import { useFilterPanel } from '@/hooks/useUIStore'
 
 interface FilterPanelProps {
     filters: ProblemFilters
@@ -36,7 +36,7 @@ export function FilterPanel({
     onFiltersChange, 
     availableTopics = defaultTopics 
 }: FilterPanelProps) {
-    const [isOpen, setIsOpen] = useState(false)
+    const { isOpen, setOpen } = useFilterPanel()
 
     const updateFilters = (key: keyof ProblemFilters, value: any) => {
         onFiltersChange({
@@ -90,7 +90,7 @@ export function FilterPanel({
         <div className="space-y-4">
             {/* Filter Toggle Button */}
             <div className="flex items-center justify-between">
-                <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+                <Collapsible open={isOpen} onOpenChange={setOpen}>
                     <CollapsibleTrigger asChild>
                         <Button variant="outline" className="flex items-center gap-2">
                             <Filter className="h-4 w-4" />

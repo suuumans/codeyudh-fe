@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useAuthModal } from '@/hooks/useUIStore'
 import { LoginForm, RegisterForm } from './index'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
  * This can be used for testing and development
  */
 export function AuthDemo() {
-    const [mode, setMode] = useState<'login' | 'register'>('login')
+    const { mode, setMode } = useAuthModal()
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-background p-4">

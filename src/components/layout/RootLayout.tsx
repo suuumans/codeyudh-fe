@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMobileMenu } from '@/hooks/useUIStore'
 import { Link } from '@tanstack/react-router'
 import { Menu, Code, User, LogOut, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -21,7 +21,7 @@ interface RootLayoutProps {
 export function RootLayout({ children }: RootLayoutProps) {
     const { user, isAuthenticated } = useAuth()
     const logout = useLogout()
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+    const { isOpen: isMobileMenuOpen, toggle: toggleMobileMenu, close: closeMobileMenu } = useMobileMenu()
 
     const navigationItems = [
         { to: '/', label: 'Home' },
@@ -37,7 +37,7 @@ export function RootLayout({ children }: RootLayoutProps) {
 
     const handleLogout = () => {
         logout()
-        setIsMobileMenuOpen(false)
+        closeMobileMenu()
     }
 
     const getUserInitials = (username: string) => {
@@ -130,7 +130,7 @@ export function RootLayout({ children }: RootLayoutProps) {
                     </div>
 
                     {/* Mobile Menu Button */}
-                    <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+                    <Sheet open={isMobileMenuOpen} onOpenChange={(open) => open ? toggleMobileMenu() : closeMobileMenu()}>
                         <SheetTrigger asChild>
                             <Button
                                 variant="ghost"
@@ -148,7 +148,7 @@ export function RootLayout({ children }: RootLayoutProps) {
                                     <Link
                                         to="/"
                                         className="flex items-center space-x-2"
-                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        onClick={closeMobileMenu}
                                     >
                                         <Code className="h-6 w-6" />
                                         <span className="font-bold text-xl">CodeYudh</span>
@@ -162,7 +162,7 @@ export function RootLayout({ children }: RootLayoutProps) {
                                             key={item.to}
                                             to={item.to}
                                             className="text-lg font-medium transition-colors hover:text-primary [&.active]:text-primary"
-                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            onClick={closeMobileMenu}
                                         >
                                             {item.label}
                                         </Link>
@@ -199,7 +199,7 @@ export function RootLayout({ children }: RootLayoutProps) {
                                                 >
                                                     <Link
                                                         to={"/profile" as any}
-                                                        onClick={() => setIsMobileMenuOpen(false)}
+                                                        onClick={closeMobileMenu}
                                                     >
                                                         <User className="mr-2 h-4 w-4" />
                                                         Profile
@@ -212,7 +212,7 @@ export function RootLayout({ children }: RootLayoutProps) {
                                                 >
                                                     <Link
                                                         to={"/settings" as any}
-                                                        onClick={() => setIsMobileMenuOpen(false)}
+                                                        onClick={closeMobileMenu}
                                                     >
                                                         <Settings className="mr-2 h-4 w-4" />
                                                         Settings
@@ -237,7 +237,7 @@ export function RootLayout({ children }: RootLayoutProps) {
                                             >
                                                 <Link
                                                     to={"/login" as any}
-                                                    onClick={() => setIsMobileMenuOpen(false)}
+                                                    onClick={closeMobileMenu}
                                                 >
                                                     Sign In
                                                 </Link>
@@ -248,7 +248,7 @@ export function RootLayout({ children }: RootLayoutProps) {
                                             >
                                                 <Link
                                                     to="/register"
-                                                    onClick={() => setIsMobileMenuOpen(false)}
+                                                    onClick={closeMobileMenu}
                                                 >
                                                     Sign Up
                                                 </Link>

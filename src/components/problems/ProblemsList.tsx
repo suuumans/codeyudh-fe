@@ -3,7 +3,7 @@ import { ProblemCard } from './ProblemCard'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 import { Grid, List, Search } from 'lucide-react'
-import { useState } from 'react'
+import { useProblemsViewMode } from '@/hooks/useUIStore'
 
 interface ProblemsListProps {
     problems: Problem[]
@@ -49,7 +49,7 @@ function EmptyState() {
 }
 
 export function ProblemsList({ problems, loading }: ProblemsListProps) {
-    const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+    const { viewMode, setViewMode } = useProblemsViewMode()
 
     const handleProblemClick = (problemId: string) => {
         // TODO: Navigate to problem detail page

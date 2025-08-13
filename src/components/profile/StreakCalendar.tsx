@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Calendar } from '@/components/ui/calendar'
 import type { UserStatistics } from '@/types'
 import { Calendar as CalendarIcon, Flame, Award } from 'lucide-react'
-import { useState } from 'react'
+import { useCalendarSelection } from '@/hooks/useUIStore'
 
 interface StreakCalendarProps {
   statistics: UserStatistics
@@ -20,7 +20,7 @@ const mockAchievements = [
 ]
 
 export function StreakCalendar({ statistics, activityData }: StreakCalendarProps) {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
+  const { selectedDate, setSelectedDate } = useCalendarSelection()
 
   // Generate mock activity data for the last 90 days
   const generateActivityData = () => {
