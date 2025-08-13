@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import type { ReactNode, ComponentType } from 'react'
 import { useNavigate } from '@tanstack/react-router'
-import { useAuth } from '../../hooks/useAuth'
+import { useAuthStatus } from '../../hooks/useAuth'
 
 interface PublicRouteProps {
     children: ReactNode
@@ -18,7 +18,7 @@ export function PublicRoute({
     redirectTo = '/dashboard',
     redirectIfAuthenticated = true,
 }: PublicRouteProps) {
-    const { isAuthenticated, isLoading } = useAuth()
+    const { isAuthenticated, isLoading } = useAuthStatus()
     const navigate = useNavigate()
 
     useEffect(() => {

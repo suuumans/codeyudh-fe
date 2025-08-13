@@ -11,7 +11,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth, useLogout } from '@/hooks/useAuth'
 import { ThemeToggle } from '@/components/theme'
 
 interface RootLayoutProps {
@@ -19,7 +19,8 @@ interface RootLayoutProps {
 }
 
 export function RootLayout({ children }: RootLayoutProps) {
-    const { user, isAuthenticated, logout } = useAuth()
+    const { user, isAuthenticated } = useAuth()
+    const logout = useLogout()
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
     const navigationItems = [

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import type { ReactNode, ComponentType } from 'react'
 import { useNavigate, useLocation } from '@tanstack/react-router'
-import { useAuth } from '../../hooks/useAuth'
+import { useAuthStatus } from '../../hooks/useAuth'
 import { Card, CardContent } from '../ui/card'
 
 interface ProtectedRouteProps {
@@ -51,7 +51,7 @@ export function ProtectedRoute({
     fallback,
     redirectTo = '/login',
 }: ProtectedRouteProps) {
-    const { isAuthenticated, isLoading } = useAuth()
+    const { isAuthenticated, isLoading } = useAuthStatus()
     const navigate = useNavigate()
     const location = useLocation()
 
@@ -102,7 +102,7 @@ export function withProtectedRoute<P extends object>(
 
 // Hook for checking if current route should be protected
 export function useProtectedRoute(redirectTo?: string) {
-    const { isAuthenticated, isLoading } = useAuth()
+    const { isAuthenticated, isLoading } = useAuthStatus()
     const navigate = useNavigate()
     const location = useLocation()
 

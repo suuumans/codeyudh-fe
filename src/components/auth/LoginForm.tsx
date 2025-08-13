@@ -20,7 +20,7 @@ import {
     FormMessage,
 } from '../ui/form'
 import type { LoginCredentials } from '../../types'
-import { useAuth } from '../../hooks/useAuth'
+import { useAuthActions, useAuthStatus } from '../../hooks/useAuth'
 
 // Validation schema
 const loginSchema = z.object({
@@ -42,7 +42,8 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onSuccess, className }: LoginFormProps) {
-    const { login, isLoading, error, clearError } = useAuth()
+    const { login, clearError, isLoginLoading, loginError } = useAuthActions()
+    const { error } = useAuthStatus()
 
     const form = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
@@ -58,7 +59,7 @@ export function LoginForm({ onSuccess, className }: LoginFormProps) {
             await login(data as LoginCredentials)
             onSuccess?.()
         } catch (error) {
-            // Error is handled by the auth context
+            // Error is handled by the auth store
             console.error('Login failed:', error)
         }
     }
@@ -77,9 +78,9 @@ export function LoginForm({ onSuccess, className }: LoginFormProps) {
                         onSubmit={form.handleSubmit(onSubmit)}
                         className="space-y-4"
                     >
-                        {error && (
+                        {(loginError || error) && (
                             <Alert variant="destructive">
-                                <AlertDescription>{error}</AlertDescription>
+                                <AlertDescription>{loginError || error}</AlertDescription>
                             </Alert>
                         )}
 
@@ -94,7 +95,7 @@ export function LoginForm({ onSuccess, className }: LoginFormProps) {
                                             type="email"
                                             placeholder="Enter your email"
                                             {...field}
-                                            disabled={isLoading}
+                                            disabled={isLoginLoading}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -113,7 +114,7 @@ export function LoginForm({ onSuccess, className }: LoginFormProps) {
                                             type="password"
                                             placeholder="Enter your password"
                                             {...field}
-                                            disabled={isLoading}
+                                            disabled={isLoginLoading}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -124,9 +125,9 @@ export function LoginForm({ onSuccess, className }: LoginFormProps) {
                         <Button
                             type="submit"
                             className="w-full"
-                            disabled={isLoading}
+                            disabled={isLoginLoading}
                         >
-                            {isLoading ? 'Signing In...' : 'Sign In'}
+                            {isLoginLoading ? 'Signing In...' : 'Sign In'}
                         </Button>
                     </form>
                 </Form>

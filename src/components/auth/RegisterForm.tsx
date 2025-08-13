@@ -22,7 +22,7 @@ import {
     FormMessage,
 } from '../ui/form'
 import type { RegisterData } from '../../types'
-import { useAuth } from '../../hooks/useAuth'
+import { useAuthActions, useAuthStatus } from '../../hooks/useAuth'
 
 // Password strength calculation
 function calculatePasswordStrength(password: string): {
@@ -104,7 +104,8 @@ interface RegisterFormProps {
 }
 
 export function RegisterForm({ onSuccess, className }: RegisterFormProps) {
-    const { register, isLoading, error, clearError } = useAuth()
+    const { register, clearError, isRegisterLoading, registerError } = useAuthActions()
+    const { error } = useAuthStatus()
 
     const form = useForm<RegisterFormData>({
         resolver: zodResolver(registerSchema),
@@ -149,9 +150,9 @@ export function RegisterForm({ onSuccess, className }: RegisterFormProps) {
                         onSubmit={form.handleSubmit(onSubmit)}
                         className="space-y-4"
                     >
-                        {error && (
+                        {(registerError || error) && (
                             <Alert variant="destructive">
-                                <AlertDescription>{error}</AlertDescription>
+                                <AlertDescription>{registerError || error}</AlertDescription>
                             </Alert>
                         )}
 
@@ -165,7 +166,7 @@ export function RegisterForm({ onSuccess, className }: RegisterFormProps) {
                                         <Input
                                             placeholder="Enter your username"
                                             {...field}
-                                            disabled={isLoading}
+                                            disabled={isRegisterLoading}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -184,7 +185,7 @@ export function RegisterForm({ onSuccess, className }: RegisterFormProps) {
                                             type="email"
                                             placeholder="Enter your email"
                                             {...field}
-                                            disabled={isLoading}
+                                            disabled={isRegisterLoading}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -203,7 +204,7 @@ export function RegisterForm({ onSuccess, className }: RegisterFormProps) {
                                             type="password"
                                             placeholder="Enter your password"
                                             {...field}
-                                            disabled={isLoading}
+                                            disabled={isRegisterLoading}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -267,7 +268,7 @@ export function RegisterForm({ onSuccess, className }: RegisterFormProps) {
                                             type="password"
                                             placeholder="Confirm your password"
                                             {...field}
-                                            disabled={isLoading}
+                                            disabled={isRegisterLoading}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -278,9 +279,9 @@ export function RegisterForm({ onSuccess, className }: RegisterFormProps) {
                         <Button
                             type="submit"
                             className="w-full"
-                            disabled={isLoading}
+                            disabled={isRegisterLoading}
                         >
-                            {isLoading
+                            {isRegisterLoading
                                 ? 'Creating Account...'
                                 : 'Create Account'}
                         </Button>
