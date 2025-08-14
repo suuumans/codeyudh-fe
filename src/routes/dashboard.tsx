@@ -2,6 +2,12 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useAuth } from '@/hooks/useAuth'
 import { StatisticsCards, RecentActivity, ProgressCharts } from '@/components/dashboard'
 import { useUserStore, useUserStatistics, useUserSubmissions } from '@/hooks/useUserStore'
+import { 
+  StatisticsCardsSkeleton, 
+  ProgressChartsSkeleton, 
+  RecentActivitySkeleton 
+} from '@/components/ui/loading-skeletons'
+import { ResponsiveContainer, ResponsiveStack } from '@/components/ui/responsive-container'
 
 function Dashboard() {
   const { user } = useAuth()
@@ -12,7 +18,7 @@ function Dashboard() {
   const { data: submissions, isLoading: submissionsLoading } = useUserSubmissions()
   
   const currentStats = userStats || statistics
-  const recentSubmissions = submissions || []
+  const recentSubmissions = Array.isArray(submissions) ? submissions : submissions?.data || []
   const loading = statsLoading || submissionsLoading
 
   if (!user) {
@@ -26,25 +32,39 @@ function Dashboard() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Welcome back, {user.username}!</h1>
-          <p className="text-muted-foreground mt-1">
-            Track your progress and continue your coding journey
-          </p>
+    <ResponsiveContainer size="xl" padding="md">
+      <ResponsiveStack direction="vertical" gap="lg">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold">Welcome back, {user.username}!</h1>
+            <p className="text-muted-foreground mt-1">
+              Track your progress and continue your coding journey
+            </p>
+          </div>
         </div>
-      </div>
 
-      {/* Statistics Cards */}
-      {currentStats && <StatisticsCards statistics={currentStats} />}
+        {/* Statistics Cards */}
+        {statsLoading ? (
+          <StatisticsCardsSkeleton />
+        ) : currentStats ? (
+          <StatisticsCards statistics={currentStats} />
+        ) : null}
 
-      {/* Progress Charts */}
-      {currentStats && <ProgressCharts statistics={currentStats} />}
+        {/* Progress Charts */}
+        {statsLoading ? (
+          <ProgressChartsSkeleton />
+        ) : currentStats ? (
+          <ProgressCharts statistics={currentStats} />
+        ) : null}
 
-      {/* Recent Activity */}
-      <RecentActivity submissions={recentSubmissions} loading={loading} />
-    </div>
+        {/* Recent Activity */}
+        {submissionsLoading ? (
+          <RecentActivitySkeleton />
+        ) : (
+          <RecentActivity submissions={recentSubmissions} loading={loading} />
+        )}
+      </ResponsiveStack>
+    </ResponsiveContainer>
   )
 }
 

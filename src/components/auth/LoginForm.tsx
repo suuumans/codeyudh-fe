@@ -8,7 +8,7 @@ import {
     CardHeader,
     CardTitle,
 } from '../ui/card'
-import { Button } from '../ui/button'
+import { LoadingButton } from '../ui/loading-button'
 import { Input } from '../ui/input'
 import { Alert, AlertDescription } from '../ui/alert'
 import {
@@ -122,13 +122,14 @@ export function LoginForm({ onSuccess, className }: LoginFormProps) {
                             )}
                         />
 
-                        <Button
+                        <LoadingButton
                             type="submit"
                             className="w-full"
-                            disabled={isLoginLoading}
+                            loading={isLoginLoading}
+                            loadingText="Signing In..."
                         >
-                            {isLoginLoading ? 'Signing In...' : 'Sign In'}
-                        </Button>
+                            Sign In
+                        </LoadingButton>
                     </form>
                 </Form>
 

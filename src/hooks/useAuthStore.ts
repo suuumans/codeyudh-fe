@@ -14,10 +14,10 @@ export function useAuth() {
   // Check for existing session on mount
   useEffect(() => {
     const checkExistingSession = async () => {
-      const token = tokenStorage.getToken()
+      const tokens = tokenStorage.getAuthTokens()
       const userData = tokenStorage.getUserData()
 
-      if (token && userData) {
+      if (tokens && userData) {
         authActions.setUser(userData)
         userActions.setUser(userData)
       } else {
@@ -43,8 +43,7 @@ export function useLogin() {
     },
     onSuccess: (response) => {
       // Store tokens and user data
-      tokenStorage.setToken(response.token)
-      tokenStorage.setRefreshToken(response.refreshToken)
+      tokenStorage.setAuthTokens(response.tokens)
       tokenStorage.setUserData(response.user)
 
       // Update stores
@@ -72,8 +71,7 @@ export function useRegister() {
     },
     onSuccess: (response) => {
       // Store tokens and user data
-      tokenStorage.setToken(response.token)
-      tokenStorage.setRefreshToken(response.refreshToken)
+      tokenStorage.setAuthTokens(response.tokens)
       tokenStorage.setUserData(response.user)
 
       // Update stores
@@ -111,7 +109,7 @@ export function useCurrentUser() {
   const query = useQuery({
     queryKey: ['auth', 'currentUser'],
     queryFn: () => authApi.getCurrentUser(),
-    enabled: isAuthenticated && !!tokenStorage.getToken(),
+    enabled: isAuthenticated && !!tokenStorage.getAuthTokens(),
     staleTime: 1000 * 60 * 5, // 5 minutes
   })
 
@@ -156,16 +154,14 @@ export function useAuthActions() {
 export function useAuthToken() {
   const { isAuthenticated } = useStore(authStore)
   
-  const getToken = () => tokenStorage.getToken()
-  const getRefreshToken = () => tokenStorage.getRefreshToken()
+  const getAuthTokens = () => tokenStorage.getAuthTokens()
   const hasValidToken = () => {
-    const token = getToken()
-    return !!token && isAuthenticated
+    const tokens = getAuthTokens()
+    return !!tokens && isAuthenticated
   }
   
   return {
-    getToken,
-    getRefreshToken,
+    getAuthTokens,
     hasValidToken,
     isAuthenticated,
   }

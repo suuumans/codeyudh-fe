@@ -30,16 +30,16 @@ export function ProblemCard({ problem, userProgress, onClick }: ProblemCardProps
     
     return (
         <Card 
-            className="cursor-pointer hover:shadow-md transition-shadow"
+            className="cursor-pointer hover:shadow-md transition-all duration-200 active:scale-[0.98] touch-manipulation"
             onClick={() => onClick(problem.id)}
         >
-            <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                    <CardTitle className="text-lg font-semibold line-clamp-2">
+            <CardHeader className="pb-3 px-4 sm:px-6">
+                <div className="flex items-start justify-between gap-3">
+                    <CardTitle className="text-base sm:text-lg font-semibold line-clamp-2 leading-tight">
                         {problem.title}
                     </CardTitle>
                     <StatusIcon 
-                        className={`h-5 w-5 flex-shrink-0 ml-2 ${
+                        className={`h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 ${
                             userProgress?.status === 'solved' 
                                 ? 'text-green-600' 
                                 : userProgress?.status === 'attempted'
@@ -49,35 +49,35 @@ export function ProblemCard({ problem, userProgress, onClick }: ProblemCardProps
                     />
                 </div>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-3 px-4 sm:px-6 pb-4 sm:pb-6">
                 <div className="flex items-center gap-2 flex-wrap">
                     <Badge 
                         variant="secondary" 
-                        className={difficultyColors[problem.difficulty]}
+                        className={`${difficultyColors[problem.difficulty]} text-xs sm:text-sm px-2 py-1`}
                     >
                         {problem.difficulty.charAt(0).toUpperCase() + problem.difficulty.slice(1)}
                     </Badge>
                     {problem.topics.slice(0, 2).map((topic) => (
-                        <Badge key={topic} variant="outline" className="text-xs">
+                        <Badge key={topic} variant="outline" className="text-xs px-2 py-1">
                             {topic}
                         </Badge>
                     ))}
                     {problem.topics.length > 2 && (
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className="text-xs px-2 py-1">
                             +{problem.topics.length - 2} more
                         </Badge>
                     )}
                 </div>
                 
                 <div className="space-y-2">
-                    <div className="flex justify-between text-sm text-muted-foreground">
+                    <div className="flex justify-between text-xs sm:text-sm text-muted-foreground">
                         <span>Acceptance Rate</span>
                         <span>{problem.acceptanceRate.toFixed(1)}%</span>
                     </div>
                     <Progress value={problem.acceptanceRate} className="h-2" />
                 </div>
                 
-                <div className="text-sm text-muted-foreground">
+                <div className="text-xs sm:text-sm text-muted-foreground">
                     {problem.totalSubmissions.toLocaleString()} submissions
                 </div>
             </CardContent>

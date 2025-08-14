@@ -3,82 +3,81 @@
  * Supports both localStorage and sessionStorage based on user preference
  */
 
-const TOKEN_KEY = 'auth_token'
-const REFRESH_TOKEN_KEY = 'refresh_token'
+import type { AuthTokens, User } from '@/types'
+
+const AUTH_TOKENS_KEY = 'auth_tokens'
 const USER_KEY = 'user_data'
 
 export interface TokenStorage {
-    getToken(): string | null
-    setToken(token: string): void
-    getRefreshToken(): string | null
-    setRefreshToken(token: string): void
-    getUserData(): any | null
-    setUserData(user: any): void
+    getAuthTokens(): AuthTokens | null
+    setAuthTokens(tokens: AuthTokens): void
+    getUserData(): User | null
+    setUserData(user: User): void
     clearAll(): void
 }
 
 class LocalStorageManager implements TokenStorage {
-    getToken(): string | null {
-        return localStorage.getItem(TOKEN_KEY)
+    getAuthTokens(): AuthTokens | null {
+        const tokens = localStorage.getItem(AUTH_TOKENS_KEY)
+        return tokens ? JSON.parse(tokens) : null
     }
 
-    setToken(token: string): void {
-        localStorage.setItem(TOKEN_KEY, token)
+    setAuthTokens(tokens: AuthTokens): void {
+        localStorage.setItem(AUTH_TOKENS_KEY, JSON.stringify(tokens))
     }
 
-    getRefreshToken(): string | null {
-        return localStorage.getItem(REFRESH_TOKEN_KEY)
-    }
-
-    setRefreshToken(token: string): void {
-        localStorage.setItem(REFRESH_TOKEN_KEY, token)
-    }
-
-    getUserData(): any | null {
+    getUserData(): User | null {
         const userData = localStorage.getItem(USER_KEY)
-        return userData ? JSON.parse(userData) : null
+        if (!userData) return null
+        
+        const parsed = JSON.parse(userData)
+        // Convert date strings back to Date objects
+        return {
+            ...parsed,
+            createdAt: new Date(parsed.createdAt),
+            updatedAt: new Date(parsed.updatedAt)
+        }
     }
 
-    setUserData(user: any): void {
+    setUserData(user: User): void {
         localStorage.setItem(USER_KEY, JSON.stringify(user))
     }
 
     clearAll(): void {
-        localStorage.removeItem(TOKEN_KEY)
-        localStorage.removeItem(REFRESH_TOKEN_KEY)
+        localStorage.removeItem(AUTH_TOKENS_KEY)
         localStorage.removeItem(USER_KEY)
     }
 }
 
 class SessionStorageManager implements TokenStorage {
-    getToken(): string | null {
-        return sessionStorage.getItem(TOKEN_KEY)
+    getAuthTokens(): AuthTokens | null {
+        const tokens = sessionStorage.getItem(AUTH_TOKENS_KEY)
+        return tokens ? JSON.parse(tokens) : null
     }
 
-    setToken(token: string): void {
-        sessionStorage.setItem(TOKEN_KEY, token)
+    setAuthTokens(tokens: AuthTokens): void {
+        sessionStorage.setItem(AUTH_TOKENS_KEY, JSON.stringify(tokens))
     }
 
-    getRefreshToken(): string | null {
-        return sessionStorage.getItem(REFRESH_TOKEN_KEY)
-    }
-
-    setRefreshToken(token: string): void {
-        sessionStorage.setItem(REFRESH_TOKEN_KEY, token)
-    }
-
-    getUserData(): any | null {
+    getUserData(): User | null {
         const userData = sessionStorage.getItem(USER_KEY)
-        return userData ? JSON.parse(userData) : null
+        if (!userData) return null
+        
+        const parsed = JSON.parse(userData)
+        // Convert date strings back to Date objects
+        return {
+            ...parsed,
+            createdAt: new Date(parsed.createdAt),
+            updatedAt: new Date(parsed.updatedAt)
+        }
     }
 
-    setUserData(user: any): void {
+    setUserData(user: User): void {
         sessionStorage.setItem(USER_KEY, JSON.stringify(user))
     }
 
     clearAll(): void {
-        sessionStorage.removeItem(TOKEN_KEY)
-        sessionStorage.removeItem(REFRESH_TOKEN_KEY)
+        sessionStorage.removeItem(AUTH_TOKENS_KEY)
         sessionStorage.removeItem(USER_KEY)
     }
 }
@@ -88,3 +87,10 @@ export const tokenStorage: TokenStorage = new LocalStorageManager()
 
 // Alternative session storage for temporary sessions
 export const sessionTokenStorage: TokenStorage = new SessionStorageManager()
+
+// Export convenience functions
+export const getAuthTokens = () => tokenStorage.getAuthTokens()
+export const setAuthTokens = (tokens: AuthTokens) => tokenStorage.setAuthTokens(tokens)
+export const getUserData = () => tokenStorage.getUserData()
+export const setUserData = (user: User) => tokenStorage.setUserData(user)
+export const clearAuthTokens = () => tokenStorage.clearAll()

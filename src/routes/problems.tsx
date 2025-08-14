@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { ProblemsList } from '@/components/problems/ProblemsList'
 import { SearchBar } from '@/components/problems/SearchBar'
 import { FilterPanel } from '@/components/problems/FilterPanel'
+import { ResponsiveContainer, ResponsiveStack } from '@/components/ui/responsive-container'
 import type { Problem, ProblemFilters } from '@/types'
 import { useState, useEffect, useMemo } from 'react'
 import { z } from 'zod'
@@ -186,17 +187,17 @@ function ProblemsPage() {
     }
 
     return (
-        <div className="container mx-auto px-4 py-6">
-            <div className="mb-6">
-                <h1 className="text-3xl font-bold mb-2">Problems</h1>
-                <p className="text-muted-foreground">
-                    Practice coding problems to improve your skills
-                </p>
-            </div>
+        <ResponsiveContainer size="xl" padding="md">
+            <ResponsiveStack direction="vertical" gap="lg">
+                <div className="mb-2">
+                    <h1 className="text-2xl sm:text-3xl font-bold mb-2">Problems</h1>
+                    <p className="text-muted-foreground">
+                        Practice coding problems to improve your skills
+                    </p>
+                </div>
 
-            <div className="space-y-6">
                 {/* Search and Filters */}
-                <div className="space-y-4">
+                <ResponsiveStack direction="vertical" gap="md">
                     <SearchBar
                         value={filters.search || ''}
                         onChange={handleSearchChange}
@@ -206,7 +207,7 @@ function ProblemsPage() {
                         filters={filters}
                         onFiltersChange={handleFilterChange}
                     />
-                </div>
+                </ResponsiveStack>
 
                 {/* Problems List */}
                 <ProblemsList
@@ -214,9 +215,18 @@ function ProblemsPage() {
                     filters={filters}
                     onFilterChange={handleFilterChange}
                     loading={loading}
+                    error={null}
+                    retry={() => {
+                        setLoading(true)
+                        // Simulate retry
+                        setTimeout(() => {
+                            setAllProblems(mockProblems)
+                            setLoading(false)
+                        }, 1000)
+                    }}
                 />
-            </div>
-        </div>
+            </ResponsiveStack>
+        </ResponsiveContainer>
     )
 }
 

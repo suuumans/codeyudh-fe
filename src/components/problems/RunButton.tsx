@@ -1,26 +1,35 @@
-import { Button } from '@/components/ui/button'
-import { Play, Loader2 } from 'lucide-react'
+import { LoadingButton } from '@/components/ui/loading-button'
+import { Play } from 'lucide-react'
 
 interface RunButtonProps {
   onClick: () => void
   loading?: boolean
   disabled?: boolean
+  success?: boolean
+  error?: boolean
 }
 
-export function RunButton({ onClick, loading = false, disabled = false }: RunButtonProps) {
+export function RunButton({ 
+  onClick, 
+  loading = false, 
+  disabled = false,
+  success = false,
+  error = false
+}: RunButtonProps) {
   return (
-    <Button 
-      onClick={onClick} 
-      disabled={loading || disabled}
+    <LoadingButton
+      onClick={onClick}
+      loading={loading}
+      success={success}
+      error={error}
+      disabled={disabled}
       variant="outline"
-      className="flex items-center gap-2"
+      loadingText="Running..."
+      successText="Run Successful"
+      errorText="Run Failed"
     >
-      {loading ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
-      ) : (
-        <Play className="h-4 w-4" />
-      )}
-      {loading ? 'Running...' : 'Run Code'}
-    </Button>
+      <Play className="h-4 w-4" />
+      Run Code
+    </LoadingButton>
   )
 }

@@ -13,6 +13,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useAuth, useLogout } from '@/hooks/useAuth'
 import { ThemeToggle } from '@/components/theme'
+import { useGlobalErrorHandler } from '@/hooks/useGlobalErrorHandler'
 
 interface RootLayoutProps {
     children: React.ReactNode
@@ -22,6 +23,9 @@ export function RootLayout({ children }: RootLayoutProps) {
     const { user, isAuthenticated } = useAuth()
     const logout = useLogout()
     const { isOpen: isMobileMenuOpen, toggle: toggleMobileMenu, close: closeMobileMenu } = useMobileMenu()
+    
+    // Initialize global error handling
+    useGlobalErrorHandler()
 
     const navigationItems = [
         { to: '/', label: 'Home' },

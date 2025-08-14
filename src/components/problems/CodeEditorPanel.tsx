@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import MonacoEditor from '@monaco-editor/react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Progress } from '@/components/ui/progress'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { QuickExecutionProgress } from '@/components/ui/execution-progress'
 import { useTheme } from '@/components/theme/ThemeProvider'
 import { RunButton } from './RunButton'
 import { SubmitButton } from './SubmitButton'
@@ -72,9 +72,15 @@ interface CodeEditorPanelProps {
   onRun?: (code: string, language: string) => void
   onSubmit?: (code: string, language: string) => void
   loading?: boolean
+  runSuccess?: boolean
+  runError?: boolean
+  submitSuccess?: boolean
+  submitError?: boolean
   result?: TestResult[]
   error?: string
   stats?: ExecutionStatsType
+  executionProgress?: number
+  executionMessage?: string
 }
 
 export function CodeEditorPanel({
@@ -83,9 +89,15 @@ export function CodeEditorPanel({
   onRun,
   onSubmit,
   loading = false,
+  runSuccess = false,
+  runError = false,
+  submitSuccess = false,
+  submitError = false,
   result,
   error,
   stats,
+  executionProgress = 0,
+  executionMessage,
 }: CodeEditorPanelProps) {
   const [language, setLanguage] = useState(initialLanguage)
   const [code, setCode] = useState(initialCode)
@@ -191,20 +203,23 @@ export function CodeEditorPanel({
           <RunButton 
             onClick={() => onRun?.(code, language)} 
             loading={loading}
+            success={runSuccess}
+            error={runError}
           />
           <SubmitButton 
             onClick={() => onSubmit?.(code, language)} 
             loading={loading}
+            success={submitSuccess}
+            error={submitError}
           />
         </div>
 
-        {/* Loading Progress */}
-        {loading && (
-          <div className="space-y-2">
-            <div className="text-sm text-muted-foreground">Running code...</div>
-            <Progress value={70} className="h-2" />
-          </div>
-        )}
+        {/* Execution Progress */}
+        <QuickExecutionProgress
+          status={loading ? 'running' : runSuccess || submitSuccess ? 'completed' : runError || submitError ? 'failed' : 'idle'}
+          message={executionMessage}
+          progress={executionProgress}
+        />
 
         {/* Error Display */}
         {error && (

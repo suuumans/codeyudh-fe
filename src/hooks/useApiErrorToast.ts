@@ -1,12 +1,17 @@
 import { useEffect } from 'react'
-import { toast } from 'sonner'
+import { handleError } from '@/lib/error-utils'
 
-export function useApiErrorToast(error: unknown) {
+export function useApiErrorToast(error: unknown, options?: {
+  context?: string
+  onRetry?: () => void
+}) {
   useEffect(() => {
     if (!error) return
-    let message = 'An unexpected error occurred.'
-    if (typeof error === 'string') message = error
-    if (typeof error === 'object' && error && 'message' in error) message = (error as any).message
-    toast.error(message)
-  }, [error])
+    
+    handleError(error, {
+      showToast: true,
+      context: options?.context,
+      onRetry: options?.onRetry,
+    })
+  }, [error, options?.context, options?.onRetry])
 }

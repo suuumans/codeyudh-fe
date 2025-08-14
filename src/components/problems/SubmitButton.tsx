@@ -1,25 +1,34 @@
-import { Button } from '@/components/ui/button'
-import { Send, Loader2 } from 'lucide-react'
+import { LoadingButton } from '@/components/ui/loading-button'
+import { Send } from 'lucide-react'
 
 interface SubmitButtonProps {
   onClick: () => void
   loading?: boolean
   disabled?: boolean
+  success?: boolean
+  error?: boolean
 }
 
-export function SubmitButton({ onClick, loading = false, disabled = false }: SubmitButtonProps) {
+export function SubmitButton({ 
+  onClick, 
+  loading = false, 
+  disabled = false,
+  success = false,
+  error = false
+}: SubmitButtonProps) {
   return (
-    <Button 
-      onClick={onClick} 
-      disabled={loading || disabled}
-      className="flex items-center gap-2"
+    <LoadingButton
+      onClick={onClick}
+      loading={loading}
+      success={success}
+      error={error}
+      disabled={disabled}
+      loadingText="Submitting..."
+      successText="Submitted!"
+      errorText="Submit Failed"
     >
-      {loading ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
-      ) : (
-        <Send className="h-4 w-4" />
-      )}
-      {loading ? 'Submitting...' : 'Submit'}
-    </Button>
+      <Send className="h-4 w-4" />
+      Submit
+    </LoadingButton>
   )
 }

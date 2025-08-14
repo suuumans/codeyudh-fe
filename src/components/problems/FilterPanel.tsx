@@ -105,21 +105,22 @@ export function FilterPanel({
                     </CollapsibleTrigger>
                     
                     <CollapsibleContent className="mt-4 space-y-4">
-                        <div className="grid gap-4 p-4 border rounded-lg bg-muted/50">
+                        <div className="grid gap-4 p-3 sm:p-4 border rounded-lg bg-muted/50">
                             {/* Difficulty Filter */}
-                            <div className="space-y-2">
+                            <div className="space-y-3">
                                 <h4 className="font-medium text-sm">Difficulty</h4>
-                                <div className="flex gap-2 flex-wrap">
+                                <div className="flex gap-3 flex-wrap">
                                     {difficulties.map((difficulty) => (
-                                        <div key={difficulty} className="flex items-center space-x-2">
+                                        <div key={difficulty} className="flex items-center space-x-2 min-h-[44px] sm:min-h-auto">
                                             <Checkbox
                                                 id={`difficulty-${difficulty}`}
                                                 checked={filters.difficulty?.includes(difficulty) || false}
                                                 onCheckedChange={() => toggleDifficulty(difficulty)}
+                                                className="h-5 w-5 sm:h-4 sm:w-4"
                                             />
                                             <label
                                                 htmlFor={`difficulty-${difficulty}`}
-                                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 capitalize"
+                                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 capitalize cursor-pointer"
                                             >
                                                 {difficulty}
                                             </label>
@@ -129,19 +130,20 @@ export function FilterPanel({
                             </div>
 
                             {/* Status Filter */}
-                            <div className="space-y-2">
+                            <div className="space-y-3">
                                 <h4 className="font-medium text-sm">Status</h4>
-                                <div className="flex gap-2 flex-wrap">
+                                <div className="flex gap-3 flex-wrap">
                                     {statusOptions.map((status) => (
-                                        <div key={status.value} className="flex items-center space-x-2">
+                                        <div key={status.value} className="flex items-center space-x-2 min-h-[44px] sm:min-h-auto">
                                             <Checkbox
                                                 id={`status-${status.value}`}
                                                 checked={filters.status?.includes(status.value) || false}
                                                 onCheckedChange={() => toggleStatus(status.value)}
+                                                className="h-5 w-5 sm:h-4 sm:w-4"
                                             />
                                             <label
                                                 htmlFor={`status-${status.value}`}
-                                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
                                             >
                                                 {status.label}
                                             </label>
@@ -151,19 +153,20 @@ export function FilterPanel({
                             </div>
 
                             {/* Topics Filter */}
-                            <div className="space-y-2">
+                            <div className="space-y-3">
                                 <h4 className="font-medium text-sm">Topics</h4>
-                                <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-48 overflow-y-auto">
                                     {availableTopics.map((topic) => (
-                                        <div key={topic} className="flex items-center space-x-2">
+                                        <div key={topic} className="flex items-center space-x-2 min-h-[44px] sm:min-h-auto">
                                             <Checkbox
                                                 id={`topic-${topic}`}
                                                 checked={filters.topics?.includes(topic) || false}
                                                 onCheckedChange={() => toggleTopic(topic)}
+                                                className="h-5 w-5 sm:h-4 sm:w-4"
                                             />
                                             <label
                                                 htmlFor={`topic-${topic}`}
-                                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
                                             >
                                                 {topic}
                                             </label>
@@ -178,7 +181,7 @@ export function FilterPanel({
                                     variant="outline"
                                     size="sm"
                                     onClick={clearAllFilters}
-                                    className="w-fit"
+                                    className="w-fit min-h-[44px] sm:min-h-auto"
                                 >
                                     <X className="h-4 w-4 mr-2" />
                                     Clear All Filters
