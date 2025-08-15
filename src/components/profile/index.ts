@@ -1,3 +1,5 @@
 export { ProfileForm } from './ProfileForm'
 export { SubmissionHistory } from './SubmissionHistory'
+export { EnhancedSubmissionHistory } from './EnhancedSubmissionHistory'
+export { DetailedSubmissionView } from './DetailedSubmissionView'
 export { StreakCalendar } from './StreakCalendar'

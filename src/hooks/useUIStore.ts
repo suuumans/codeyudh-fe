@@ -2,7 +2,11 @@ import { useStore } from '@tanstack/react-store'
 import { uiStore, uiActions } from '@/stores/uiStore'
 
 export function useUIStore() {
-  return useStore(uiStore)
+  const state = useStore(uiStore)
+  return {
+    state,
+    actions: uiActions
+  }
 }
 
 export function useMobileMenu() {

@@ -2,8 +2,8 @@ import { useParams } from '@tanstack/react-router'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { useEffect, useState } from 'react'
 import type { Problem } from '@/types'
-import { CodeEditorPanel } from './CodeEditorPanel'
-import { ProblemDescription } from './ProblemDescription'
+import { SplitScreenProblemLayout } from './SplitScreenProblemLayout'
+
 
 // TODO: Replace with real API call
 const mockProblems: Problem[] = [
@@ -61,6 +61,7 @@ export function ProblemDetail() {
   const problemId = params.problemId
   const [problem, setProblem] = useState<Problem | null>(null)
   const [loading, setLoading] = useState(true)
+
 
   useEffect(() => {
     // Simulate API fetch with loading state
@@ -125,72 +126,62 @@ export function ProblemDetail() {
     )
   }
 
+  // Use enhanced layout based on user preferences
   return (
-    <div className="container mx-auto px-4 py-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-150px)]">
-        {/* Problem Description */}
-        <div className="overflow-auto">
-          <ProblemDescription problem={problem} />
-        </div>
-        
-        {/* Code Editor Panel */}
-        <div className="flex flex-col">
-          <CodeEditorPanel
-            initialCode={''}
-            initialLanguage="javascript"
-            onRun={(_code, _language) => {
-              // Simulate test run
-              setTestResult([
-                { 
-                  passed: true, 
-                  message: 'Sample test case passed.',
-                  input: 'nums = [2,7,11,15], target = 9',
-                  expectedOutput: '[0,1]',
-                  actualOutput: '[0,1]',
-                  executionTime: 45
-                },
-                { 
-                  passed: false, 
-                  message: 'Edge case failed.',
-                  input: 'nums = [3,3], target = 6',
-                  expectedOutput: '[0,1]',
-                  actualOutput: '[1,0]',
-                  executionTime: 52,
-                  error: 'Wrong Answer: Expected [0,1] but got [1,0]'
-                },
-              ])
-              setStats({ 
-                runtime: 120, 
-                memory: 32, 
-                runtimePercentile: 75, 
-                memoryPercentile: 68 
-              })
-              setError(undefined)
-            }}
-            onSubmit={(_code, _language) => {
-              // Simulate submission
-              setTestResult([
-                { 
-                  passed: true, 
-                  message: 'All test cases passed.',
-                  executionTime: 38
-                },
-              ])
-              setStats({ 
-                runtime: 110, 
-                memory: 30, 
-                runtimePercentile: 85, 
-                memoryPercentile: 92 
-              })
-              setError(undefined)
-            }}
-            loading={false}
-            result={testResult}
-            error={error}
-            stats={stats}
-          />
-        </div>
-      </div>
-    </div>
+    <SplitScreenProblemLayout
+      problem={problem}
+      initialCode={''}
+      initialLanguage="javascript"
+      onRun={(_code, _language) => {
+        // Simulate test run
+        setTestResult([
+          { 
+            passed: true, 
+            message: 'Sample test case passed.',
+            input: 'nums = [2,7,11,15], target = 9',
+            expectedOutput: '[0,1]',
+            actualOutput: '[0,1]',
+            executionTime: 45
+          },
+          { 
+            passed: false, 
+            message: 'Edge case failed.',
+            input: 'nums = [3,3], target = 6',
+            expectedOutput: '[0,1]',
+            actualOutput: '[1,0]',
+            executionTime: 52,
+            error: 'Wrong Answer: Expected [0,1] but got [1,0]'
+          },
+        ])
+        setStats({ 
+          runtime: 120, 
+          memory: 32, 
+          runtimePercentile: 75, 
+          memoryPercentile: 68 
+        })
+        setError(undefined)
+      }}
+      onSubmit={(_code, _language) => {
+        // Simulate submission
+        setTestResult([
+          { 
+            passed: true, 
+            message: 'All test cases passed.',
+            executionTime: 38
+          },
+        ])
+        setStats({ 
+          runtime: 110, 
+          memory: 30, 
+          runtimePercentile: 85, 
+          memoryPercentile: 92 
+        })
+        setError(undefined)
+      }}
+      loading={false}
+      result={testResult}
+      error={error}
+      stats={stats}
+    />
   )
 }

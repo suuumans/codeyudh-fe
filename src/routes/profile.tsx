@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useAuth } from '@/hooks/useAuth'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ProfileForm, SubmissionHistory, StreakCalendar } from '@/components/profile'
+import { ProfileForm, SubmissionHistory, EnhancedSubmissionHistory, StreakCalendar } from '@/components/profile'
 import { useUserStore, useUserSubmissions, useUpdateProfile } from '@/hooks/useUserStore'
 import { useSubmissionStore } from '@/hooks/useSubmissionStore'
 import { 
@@ -70,7 +70,7 @@ function ProfilePage() {
             {submissionsLoading ? (
               <SubmissionHistorySkeleton />
             ) : (
-              <SubmissionHistory 
+              <EnhancedSubmissionHistory 
                 submissions={currentSubmissions}
                 loading={submissionsLoading}
               />

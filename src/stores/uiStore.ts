@@ -26,6 +26,17 @@ export interface UIState {
   
   // Calendar selection
   selectedDate: Date | undefined
+  
+  // Code editor preferences
+  editorPreferences: {
+    keyBindings: 'default' | 'vim' | 'emacs'
+    fontSize: number
+    tabSize: number
+    wordWrap: boolean
+    minimap: boolean
+    autoFormat: boolean
+    splitView: boolean
+  }
 }
 
 export const uiStore = new Store<UIState>({
@@ -41,6 +52,15 @@ export const uiStore = new Store<UIState>({
     problems: 1,
   },
   selectedDate: new Date(),
+  editorPreferences: {
+    keyBindings: 'default',
+    fontSize: 14,
+    tabSize: 2,
+    wordWrap: true,
+    minimap: false,
+    autoFormat: true,
+    splitView: false,
+  },
 })
 
 // Actions
@@ -115,6 +135,27 @@ export const uiActions = {
     uiStore.setState((state) => ({
       ...state,
       selectedDate: date,
+    }))
+  },
+  
+  // Editor preferences
+  updateEditorPreferences: (preferences: Partial<UIState['editorPreferences']>) => {
+    uiStore.setState((state) => ({
+      ...state,
+      editorPreferences: {
+        ...state.editorPreferences,
+        ...preferences,
+      },
+    }))
+  },
+  
+  toggleSplitView: () => {
+    uiStore.setState((state) => ({
+      ...state,
+      editorPreferences: {
+        ...state.editorPreferences,
+        splitView: !state.editorPreferences.splitView,
+      },
     }))
   },
 }

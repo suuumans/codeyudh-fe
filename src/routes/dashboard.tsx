@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useAuth } from '@/hooks/useAuth'
-import { StatisticsCards, RecentActivity, ProgressCharts } from '@/components/dashboard'
+import { StatisticsCards, RecentActivity } from '@/components/dashboard'
+import { LazyProgressCharts, preloadCharts } from '@/components/charts/LazyCharts'
 import { useUserStore, useUserStatistics, useUserSubmissions } from '@/hooks/useUserStore'
 import { 
   StatisticsCardsSkeleton, 
@@ -8,6 +9,7 @@ import {
   RecentActivitySkeleton 
 } from '@/components/ui/loading-skeletons'
 import { ResponsiveContainer, ResponsiveStack } from '@/components/ui/responsive-container'
+import { useEffect } from 'react'
 
 function Dashboard() {
   const { user } = useAuth()
@@ -20,6 +22,13 @@ function Dashboard() {
   const currentStats = userStats || statistics
   const recentSubmissions = Array.isArray(submissions) ? submissions : submissions?.data || []
   const loading = statsLoading || submissionsLoading
+
+  // Preload charts when user data is available
+  useEffect(() => {
+    if (currentStats && !statsLoading) {
+      preloadCharts()
+    }
+  }, [currentStats, statsLoading])
 
   if (!user) {
     return (
@@ -54,7 +63,7 @@ function Dashboard() {
         {statsLoading ? (
           <ProgressChartsSkeleton />
         ) : currentStats ? (
-          <ProgressCharts statistics={currentStats} />
+          <LazyProgressCharts statistics={currentStats} />
         ) : null}
 
         {/* Recent Activity */}

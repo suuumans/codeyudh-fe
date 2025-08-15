@@ -14,6 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useAuth, useLogout } from '@/hooks/useAuth'
 import { ThemeToggle } from '@/components/theme'
 import { useGlobalErrorHandler } from '@/hooks/useGlobalErrorHandler'
+import { useMonitoring } from '@/hooks/useMonitoring'
 
 interface RootLayoutProps {
     children: React.ReactNode
@@ -24,8 +25,9 @@ export function RootLayout({ children }: RootLayoutProps) {
     const logout = useLogout()
     const { isOpen: isMobileMenuOpen, toggle: toggleMobileMenu, close: closeMobileMenu } = useMobileMenu()
     
-    // Initialize global error handling
+    // Initialize global error handling and monitoring
     useGlobalErrorHandler()
+    const { trackInteraction } = useMonitoring()
 
     const navigationItems = [
         { to: '/', label: 'Home' },
@@ -40,6 +42,7 @@ export function RootLayout({ children }: RootLayoutProps) {
     const currentNavItems = isAuthenticated ? authenticatedNavigationItems : navigationItems
 
     const handleLogout = () => {
+        trackInteraction('logout', 'header_dropdown')
         logout()
         closeMobileMenu()
     }
